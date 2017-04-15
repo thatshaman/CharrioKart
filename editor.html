@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+    <style>
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: 'VT323', monospace;
+        }
+
+        a {
+            color: #ffd800;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        textarea {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 200px;
+            height: 200px;
+            overflow: visible;
+        }
+
+        #tools {
+            height: 50px;
+        }
+
+        #brush {
+            width: 24px;
+            height: 24px;
+            border: solid 1px #000000;
+            background: #ff00ff;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div id="tools">
+        <div id="brush"></div>
+        <a href="javascript:setBrush(0)">Road</a> |
+        <a href="javascript:setBrush(1)">Wall</a> |
+        <a href="javascript:setBrush(2)">Grass</a> |
+        <a href="javascript:setBrush(3)">Boost</a> |
+        <a href="javascript:setBrush(4)">Start</a> |
+        <a href="javascript:setBrush(5)">Checkpoint</a> ||
+        <a href="javascript:setBrushSize(0)">SMALL</a> |
+        <a href="javascript:setBrushSize(1)">LARGE</a> |
+        <a href="javascript:setBrushSize(2)">HUGE</a>
+        | X: <input type="text" id="start_x" value="0" /> Z: <input type="text" id="start_z" value="0" /> D: <input type="text" id="start_angle" value="0" /> | <a href="javascript:setBrush(999)">SET</a>
+    </div>
+    <canvas id="myCanvas" width="1024" height="1024"></canvas>
+    <textarea id="mapOut"></textarea>
+    <script>
+
+    </script>
+    <script>
+
+        var map = [];
+        var start = [0, 0, 0];
+
+        xhr = new XMLHttpRequest();
+        xhr.open("GET", "tracks/mists/map.json", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var json = JSON.parse(xhr.responseText);
+                map = json.tiles;
+                start = json.start;
+
+                document.getElementById("start_x").value = start[0];
+                document.getElementById("start_z").value = start[1];
+                document.getElementById("start_angle").value = start[2];
+
+                document.getElementById("start_x").onchange = function () {
+                    start[0] = parseInt(document.getElementById("start_x").value);
+                    tilesToJson();
+                };
+
+                document.getElementById("start_z").onchange = function () {
+                    start[1] = parseInt(document.getElementById("start_z").value);
+                    tilesToJson();
+                };
+
+                document.getElementById("start_angle").onchange = function () {
+                    start[2] = parseInt(document.getElementById("start_angle").value);
+                    tilesToJson();
+                };
+
+                drawMap();
+            }
+        };
+        xhr.send();
+
+        var colors = {
+            0: "#cccccc", // road
+            1: "#ff0000", // wall
+            2: "#00ff00", // grass
+            3: "#ffff00", // boost
+            4: "#ffffff", // start
+            5: "#aaaaaa", // checkpoint
+            999: "#ff00ff"
+        };
+
+        var mouseX = 0;
+        var mouseY = 0;
+
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        var currentBrush = 0;
+        var brushSize = 2;
+
+        function getMousePos(canvas, evt) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        function setBrush(index) {
+            currentBrush = index;
+            document.getElementById("brush").style.background = colors[index];
+            document.getElementById("brush").innerHTML = brushSize + 1;
+        }
+
+        function setBrushSize(size) {
+            brushSize = size;
+            document.getElementById("brush").innerHTML = brushSize + 1;
+        }
+
+        setBrush(0);
+
+        function drawMap() {
+            for (y = 0; y < 128; y++) {
+                for (x = 0; x < 128; x++) {
+                    drawTile(x, y, colors[map[y][x]]);
+                }
+            }
+            tilesToJson();
+        }
+
+        function drawTile(x, y, color) {
+            context.fillStyle = color;
+
+            context.fillRect(x * 8, y * 8, 8, 8);
+            context.lineWidth = 1;
+            context.strokeStyle = "rgba(255, 255, 255,0.1)";
+
+            //context.translate(0.5, 0.5)
+            //context.strokeRect(x * 8, y * 8, 7, 7);
+            //context.translate(-0.5, -0.5);
+
+        }
+
+        canvas.addEventListener('click', function (evt) {
+
+            drawBrush();
+
+        });
+
+        function drawBrush() {
+
+            var x = Math.floor(mouseX / 8);
+            var y = Math.floor(mouseY / 8);
+
+            if (brushSize == 0) {
+
+                setTile(x, y, currentBrush);
+            } else if (brushSize == 1) {
+                setTile(x, y, currentBrush);
+                setTile(x - 1, y, currentBrush);
+                setTile(x + 1, y, currentBrush);
+                setTile(x, y - 1, currentBrush);
+                setTile(x, y + 1, currentBrush);
+
+            } else if (brushSize == 2) {
+
+                for (l = 0; l < 3; l++) {
+                    for (t = 0; t < 3; t++) {
+                        setTile(l + (x - 1), t + (y - 1), currentBrush);
+                    }
+                }
+                setTile(x - 2, y, currentBrush);
+                setTile(x + 2, y, currentBrush);
+                setTile(x, y - 2, currentBrush);
+                setTile(x, y + 2, currentBrush);
+
+            }
+
+        }
+
+        function setTile(x, y, index) {
+
+
+            if (x > -1 && x < 128 && y > -1 && y < 128) {
+
+                if (currentBrush == 999) {
+                    start[0] = x;
+                    start[1] = y;
+                    document.getElementById("start_x").value = x;
+                    document.getElementById("start_z").value = y;
+                    //setBrush(0);
+                } else {
+                    if (map[y][x] != index) {
+
+                        map[y][x] = index;
+                        drawTile(x, y, colors[currentBrush]);
+
+                    }
+                }
+            }
+        }
+
+
+        var mouseDown = false;
+
+        canvas.addEventListener('mousedown', function (evt) {
+            drawBrush();
+        }, false);
+
+        document.addEventListener('mousedown', function (evt) {
+            mouseDown = true;
+
+        }, false);
+
+        document.addEventListener('mouseup', function (evt) {
+            mouseDown = false;
+            tilesToJson();
+        }, false);
+
+        function tilesToJson() {
+            document.getElementById("mapOut").value = "{\r\n    \"start\":" + JSON.stringify(start) + ",\r\n    \"tiles\": " + JSON.stringify(map).replace(/],/g, "],\r\n").replace(/\[\[/g, "[\r\n[") + "}";
+        }
+
+        canvas.addEventListener('mousemove', function (evt) {
+            var mousePos = getMousePos(canvas, evt);
+            mouseX = mousePos.x
+            mouseY = mousePos.y;
+
+            if (mouseDown) drawBrush();
+        }, false);
+
+    </script>
+</body>
+</html>

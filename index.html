@@ -1,0 +1,197 @@
+﻿<html>
+
+<head>
+    <title>Super Charrio Kart</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" href="favicon.ico" type="image/gif" sizes="64x64 32x32 24x24 16x16">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="canonical">
+
+    <meta name="description" content="that_shaman's Super Charrio Kart">
+    <meta name="keywords" content="GW2, guild wars 2, Charr, Game, Race, Racing, that_shaman, that shaman, shaman">
+
+    <meta property="og:title" content="that_shaman's Super Charrio Kart" />
+    <meta property="og:image" content="http://charrio.thatshaman.com/graphics/cards/square.jpg" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@that_shaman">
+    <meta name="twitter:creator" content="@that_shaman">
+    <meta name="twitter:title" content="that_shaman's Super Charrio Kart">
+    <meta name="twitter:description" content="Fire up your engine and race around Tyria!">
+    <meta name="twitter:image" content="http://charrio.thatshaman.com/graphics/cards/large.jpg">
+
+    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
+
+    <script src="script/howler.min.js"></script>
+    <script src="script/three.min.js"></script>
+</head>
+
+<body>
+
+    <div id="mainMenu">
+        <div id="menu_title" class="popup">
+            <img src="graphics/splash.jpg" onclick="javascript:showMenu('main')" />
+        </div>
+
+        <div id="menu_about" class="popup">
+            <h3>Super Charrio Kart<br />
+                2017 <a href="http://www.thatshaman.com" target="_blank">that_shaman</a>
+            </h3>
+            <p>
+                "Pixelland" Kevin MacLeod (<a href="http://www.incompetech.com" target="_blank">incompetech.com</a>) Licensed
+                under <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">Creative Commons: By Attribution 3.0</a>
+            </p>
+            <p>
+                Build with <a href="http://www.threejs.org" target="_blank">three.js </a>&amp; <a href="https://www.howlerjs.com/"
+                    target="_blank">howler.js</a>
+            </p>
+            <img src="graphics/icons/cat.png" onclick="javascript:meow()" />
+            <div class="menuButton" onclick="showMenu('main')">
+                &lt;-BACK
+            </div>
+        </div>
+
+        <div id="menu_main" class="popup">
+            <h2>SUPER CHARRIO KART</h2>
+            <div class="menuButton" onclick="javascript:showMenu('racer')">
+                <img src="graphics/icons/kart.png" />
+                SELECT YOUR KART
+            </div>
+            <div class="menuButton" onclick="javascript:showMenu('about')">
+                <img src="graphics/icons/about.png" />
+                ABOUT
+            </div>
+            <div class="menuButton" onclick="javascript:showMenu('settings')">
+                <img src="graphics/icons/settings.png" />
+                SETTINGS
+            </div>
+        </div>
+
+        <div id="menu_settings" class="popup">
+            <h2>SETTINGS</h2>
+            <div class="menuButton" onclick="javascript:toggleVolume()">
+                <img src="graphics/icons/sound.png" />
+                <span id="volume_1">SOUNDS (all)</span>
+            </div>
+            <div class="menuButton" onclick="javascript:toggleFullscreen()">
+                <img src="graphics/icons/fullscreen.png" />
+                TOGGLE FULLSCREEN
+            </div>
+            <div class="menuButton" onclick="javascript:showMenu('main')">
+                &lt;- BACK
+            </div>
+        </div>
+
+        <div id="menu_racer" class="popup">
+            <h2>SELECT YOUR KART</h2>
+            <div class="menuButton secret" onclick="javascript:setRacer('taimi')" style="display: none; color: #ffd800">
+                <img src="graphics/icons/taimi.png" />
+                TAIMI
+            </div>
+            <div class="menuButton" onclick="javascript:setRacer('kartA')">
+                <img src="graphics/icons/kartA.png" />
+                EASY:&nbsp;&nbsp; YESTERMOBILE MARK 7
+            </div>
+            <div class="menuButton" onclick="javascript:setRacer('kartB')">
+                <img src="graphics/icons/kartB.png" />
+                MEDIUM: CENTURION 2B-1G
+            </div>
+            <div class="menuButton" onclick="javascript:setRacer('kartC')">
+                <img src="graphics/icons/kartC.png" />
+                HARD:&nbsp;&nbsp; SALT MACHINE 2000
+            </div>
+            <div class="menuButton" onclick="javascript:showMenu('main')">
+                &lt;- BACK
+            </div>
+        </div>
+
+        <div id="menu_track" class="popup">
+            <h2>SELECT A LOCATION</h2>
+            <div class="menuButton secret" onclick="loadMap('inquest')">
+                <img src="graphics/icons/trackMaguuma.png" />
+                Inquest Base
+            </div>
+            <div class="menuButton" onclick="loadMap('ascalon')">
+                <img src="graphics/icons/trackAscalon.png" />
+                Ascalon
+            </div>
+            <div class="menuButton" onclick="loadMap('kryta')">
+                <img src="graphics/icons/trackKryta.png" />
+                Kryta
+            </div>
+            <div class="menuButton" onclick="loadMap('shiverpeak')">
+                <img src="graphics/icons/trackShiverpeaks.png" />
+                Shiverpeaks
+            </div>
+            <div class="menuButton" onclick="loadMap('southsun')">
+                <img src="graphics/icons/trackSouthsun.png" />
+                Southsun
+            </div>
+
+            <div class="menuButton" onclick="loadMap('mists')">
+                <img src="graphics/icons/trackMists.png" />
+                The Mists
+            </div>
+            <div class="menuButton" onclick="showMenu('racer')">&lt;- BACK</div>
+
+        </div>
+    </div>
+
+    <div id="UI">
+        <div id="pauseButton" onclick="javascript:pause()">
+            <img src="graphics/pause.png" />
+        </div>
+        <div id="timerTop"><span id="timeCurrent">0.00</span></div>
+        <div id="timerBottom">LAST: <span id="timeLast">0.00</span> BEST: <span id="timeBest">0.00</span></div>
+
+        <div id="gameMenu">
+            <div class="gameMenuPopup">
+                <h2>PAUSED</h2>
+                <div class="menuButton" onclick="javascript:unpause()" id="resume">
+                    <img src="graphics/icons/kart.png" />
+                    RESUME RACING
+                </div>
+                <div class="menuButton" onclick="javascript:toggleVolume()">
+                    <img src="graphics/icons/sound.png" />
+                    <span id="volume_2">SOUNDS (all)</span>
+                </div>
+                <div class="menuButton" onclick="javascript:toggleFullscreen()">
+                    <img src="graphics/icons/fullscreen.png" />
+                    TOGGLE FULLSCREEN
+                </div>
+                <div class="menuButton" onclick="javascript:unloadTrack()">
+                    &lt;- BACK
+                </div>
+            </div>
+        </div>
+        <div id="touch">
+            <div id="left" class="touchButton">
+                <img src="graphics/left.png" />
+            </div>
+            <div id="right" class="touchButton">
+                <img src="graphics/right.png" />
+            </div>
+            <div id="aButton" class="touchButton">
+                <img src="graphics/aButton.png" />
+            </div>
+            <div id="bButton" class="touchButton">
+                <img src="graphics/bButton.png" />
+            </div>
+
+        </div>
+        <div id="loading">[LOADING]</div>
+    </div>
+
+    <!-- required includes -->
+    <script src="app/input.js"></script>
+    <script src="app/sfx.js"></script>
+    <script src="app/racers.js"></script>
+    <script src="app/track.js"></script>
+    <script src="app/main.js"></script>
+
+</body>
+
+</html>

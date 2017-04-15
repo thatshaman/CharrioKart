@@ -1,0 +1,295 @@
+﻿html {
+    /*HACK get rid of iOS Safari document wobble... why is this even a thing ?! */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+}
+
+body {
+    font-family: 'VT323', monospace;
+    overflow: hidden;
+    padding: 0px;
+    margin: 0px;
+    font-size: 1.2em;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+    background: #000000;
+}
+
+a {
+    color: #fff3af;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    a:hover {
+        color: #fae053;
+    }
+
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+
+/*#region Main interface */
+#mainMenu {
+    z-index: 200;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    color: #ffffff;
+    padding: 0px;
+    background: #000000;
+    background-image: url('graphics/background.png');
+    background-position: center;
+    font-size: 3em;
+    transition: background-color 500ms ease-in;
+}
+
+.popup {
+    position: absolute;
+    min-width: 80vmin;
+    min-height: 50vmin;
+    background-color: #000000;
+    display: none;
+    font-size: 5vmin;
+    color: #ffffff;
+    background-clip: padding-box;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 27px;
+    border-image: url(graphics/border.png) 27 fill repeat;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+}
+
+    .popup > h2 {
+        text-align: center;
+    }
+
+#menu_title {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border: none;
+    left: 0px;
+    top: 0px;
+    transform: translate(0,0);
+    cursor: pointer;
+}
+
+    #menu_title img {
+        width: 90%;
+        max-width: 1024px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+#menu_about {
+    text-align: center;
+}
+
+
+.menuButton {
+    width: calc( 100% - 2px);
+    padding: 0px;
+    padding-left: 4px;
+    min-height: 7vmin;
+    font-size: 6vmin;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+    .menuButton:hover {
+        color: #fae053;
+        background: #2c2c2c;
+    }
+
+
+    .menuButton.track {
+        overflow: hidden;
+        display: inline-block;
+        width: 45%;
+    }
+
+
+    .menuButton img {
+        height: 4vmin;
+        vertical-align: middle;
+        margin-left: 1vmin;
+    }
+
+
+.secret {
+    display: none;
+    color: #ffd800;
+}
+/*#endregion*/
+
+/*#region Loading screen */
+#loading {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background: #000000;
+    display: block;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    display: none;
+    color: #767676;
+}
+/*#endregion*/
+
+
+/*#region Ingame UI */
+#UI {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    color: #ffffff;
+    margin: 0px;
+    padding: 0px;
+    text-shadow: 1px 1px #000000;
+    z-index: 100;
+}
+
+#pauseButton {
+    position: absolute;
+    z-index: 100;
+    top: 2vmin;
+    left: 2vmin;
+    width: 7vmin;
+    height: 7vmin;
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+    #pauseButton > img {
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+    }
+
+        #pauseButton > img:hover {
+            opacity: 1;
+        }
+
+#timerTop {
+    text-align: right;
+    position: absolute;
+    z-index: 101;
+    top: 2vmin;
+    right: 2vmin;
+}
+
+#timerBottom {
+    text-align: right;
+    position: absolute;
+    z-index: 102;
+    bottom: 2vmin;
+    right: 2vmin;
+    font-size: 3.5vmin;
+    opacity: 0.5;
+}
+
+#timeCurrent {
+    font-size: 7vmin;
+    color: #fae053;
+}
+
+
+
+#touch {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background: none;
+    display: none;
+}
+
+.touchButton {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    width: 14vmin;
+    height: 14vmin;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 100%;
+    border: solid 2px rgba(255, 255,255, 0.30);
+}
+
+    .touchButton > img {
+        width: 100%;
+        height: 100%;
+        opacity: 0.4;
+    }
+
+#touch > #left {
+    bottom: 15vmin;
+    left: 10vmin;
+}
+
+#touch > #right {
+    bottom: 15vmin;
+    left: 27vmin;
+}
+
+#touch > #aButton {
+    bottom: 20vmin;
+    right: 10vmin;
+}
+
+#touch > #bButton {
+    bottom: 15vmin;
+    right: 27vmin;
+}
+
+
+#gameMenu {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background: rgba(0, 0, 0, 0.90);
+    display: block;
+    z-index: 9000;
+    align-items: center;
+    justify-content: center;
+    font-size: 5vmin;
+    display: none;
+    color: #767676;
+}
+
+
+.gameMenuPopup {
+    min-width: 80vmin;
+    min-height: 50vmin;
+    font-size: 5vmin;
+    color: #ffffff;
+}
+
+    .gameMenuPopup > h2 {
+        text-align: center;
+    }
+
+/*#endregion*/
