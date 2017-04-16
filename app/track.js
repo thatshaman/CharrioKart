@@ -18,7 +18,8 @@
     var lap = {
         started: false,
         times: [0, 0, 0],
-        checkpoint: false
+        checkpoint: false,
+        count: 0
     };
 
     // Top right lap timer
@@ -30,12 +31,12 @@
         lastUpdate: performance.now(),
         elapsed: 0.0,
         updaterate: 0.0
-    }
-    
+    };
+
     // Tile info
     var target = {
         position: { x: 0, z: 0 },
-        tile: { index: 0, x: 0, z: 0 },
+        tile: { index: 0, x: 0, z: 0 }
     };
 
     var current = {
@@ -85,9 +86,10 @@
         document.getElementById("loading").style.display = "flex";
 
         // Reset all timers
-        document.getElementById("timeCurrent").innerText = "0:00";
-        document.getElementById("timeBest").innerText = "0:00";
-        document.getElementById("timeLast").innerText = "0:00";
+        document.getElementById("timeCurrent").innerText = "00:00";
+        document.getElementById("timeBest").innerText = "00:00";
+        document.getElementById("timeLast").innerText = "00:00";
+        document.getElementById("currentLap").innerHTML = ("0000" + lap.count).slice(-4);
 
         // Load all assets and track defaults
         this.TrackName = trackName;
@@ -281,6 +283,12 @@
                     lap.times[1] = lap.times[0];
                     lap.times[0] = 0;
                     if (lap.times[1] < lap.times[2] || lap.times[2] == 0) lap.times[2] = lap.times[1];
+
+                    //Increase lap count
+                    lap.count++;
+
+                    // Current lap count   ( fixed to 9999 max for nostalgia purpose )
+                    document.getElementById("currentLap").innerText = ("0000" + lap.count).slice(-4);
 
                     // Update last / best time
                     document.getElementById("timeLast").innerText = (lap.times[1] / 1000).toFixed(2);
